@@ -15,11 +15,13 @@ jobs:
 
     - name: Install dependencies
       run: npm install
+      working-directory: ./primer-parcial
 
     - name: Build project
       run: npm run build
+      working-directory: ./primer-parcial
 
     - name: Deploy to Surge
-      run: surge --project ./ --domain ${{ secrets.SURGE_DOMAIN }} --token ${{ secrets.SURGE_TOKEN }}
+      run: surge --project ./primer-parcial --domain ${{ secrets.SURGE_DOMAIN }} --token ${{ secrets.SURGE_TOKEN }}
       env:
         SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
