@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Login to Surge
+    - name: Set up Surge authentication
       run: |
         echo "machine surge.sh" > ~/.netrc
         echo "  login ${{ secrets.SURGE_LOGIN }}" >> ~/.netrc
@@ -24,9 +24,11 @@ jobs:
       run: |
         docker run \
         -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
-        jekyll/builder:latest /bin/bash -c "chmod -R 777 /srv/jekyll && jekyll build --future"
-        
-        surge ./_site liamjimenez-parcial.surge.sh
+        jekyll/builder:latest /bin/bash -c "\
+        chmod -R 777 /srv/jekyll && \
+        jekyll build --future && \
+        gem install surge && \
+        surge /srv/jekyll/_site liamjimenez-parcial.surge.sh"
       env:
         SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
         SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
