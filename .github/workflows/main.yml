@@ -1,20 +1,25 @@
-name: CI
+name: Publicar Pagina a Surge.sh
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - name: Clona el repositorio
+        uses: actions/checkout@v3
 
-    - name: Run script on push or pull_request to main
-      run: |
-        # Ejecutar el script desde la raíz del repositorio
-        chmod +x primer-parcial.sh
-        ./primer-parcial.sh
+      - name: Configura nodejs  
+        uses: actions/setup-node@v3
+        with:
+            node-version: '18' 
+
+      - name: Instala Surge       
+        run: npm install --global surge
+
+      - name: Publicar pagina
+        run: surge --project ./ --domain ${{ secrets.SURGE_LOGIN }} --token ${{ secrets.SURGE_TOKEN }}
