@@ -2,33 +2,19 @@ name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Surge authentication
-      run: |
-        echo "machine surge.sh" > ~/.netrc
-        echo "  login ${{ secrets.SURGE_LOGIN }}" >> ~/.netrc
-        echo "  password ${{ secrets.SURGE_TOKEN }}" >> ~/.netrc
+    - uses: actions/checkout@v2
 
-    - name: Build and deploy site
+    - name: Run script on push or pull_request to main
       run: |
-        docker run \
-        -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
-        jekyll/builder:latest /bin/bash -c "\
-        chmod -R 777 /srv/jekyll && \
-        jekyll build --future && \
-        gem install surge && \
-        surge /srv/jekyll/_site liamjimenez-parcial.surge.sh"
-      env:
-        SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
-        SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+        # Ejecutar el script desde la raíz del repositorio
+        chmod +x primer-parcial.sh
+        ./primer-parcial.sh
