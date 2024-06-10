@@ -13,6 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    
-    - name: liamjimenez
-      run: primer parcial
+    - name: Run script on push or pull_request to main
+      run: |
+        # Ejecutar el script 
+        ./primer\ parcial
